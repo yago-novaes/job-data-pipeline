@@ -14,7 +14,7 @@ SELECT
     job.employer_name::VARCHAR as company_name,
     job.job_is_remote::BOOLEAN as is_remote,
     job.job_country::VARCHAR as country,
-    epoch_ms(job.job_posted_at_timestamp) as posted_at,
+    to_timestamp(job.job_posted_at_timestamp) as posted_at,
     job.job_min_salary::FLOAT as min_salary,
     job.job_max_salary::FLOAT as max_salary,
     job.job_salary_period::VARCHAR as salary_period,
