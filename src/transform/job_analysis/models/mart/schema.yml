@@ -1,0 +1,81 @@
+version: 2
+
+models:
+  - name: mart_jobs
+    description: >
+      Final analytics-ready table with enriched job data.
+      Includes annualized salaries, salary bands, seniority levels inferred
+      from the job title, and boolean flags for common tech skills detected
+      in the job description.
+    columns:
+      - name: job_id
+        description: Unique identifier for the job posting.
+        tests:
+          - not_null
+          - unique
+
+      - name: job_title
+        description: Title of the job position.
+
+      - name: company_name
+        description: Name of the hiring company.
+
+      - name: is_remote
+        description: Whether the job allows remote work.
+
+      - name: country
+        description: Country where the job is located.
+
+      - name: posted_date
+        description: Date the job was posted.
+
+      - name: annual_min_salary
+        description: Minimum salary normalized to an annual figure (USD).
+
+      - name: annual_max_salary
+        description: Maximum salary normalized to an annual figure (USD).
+
+      - name: annual_avg_salary
+        description: Average of min/max annual salary.
+
+      - name: salary_period
+        description: Original salary period before normalization.
+
+      - name: salary_band
+        description: >
+          Salary band based on annual_avg_salary:
+          Junior (<80k), Mid-level (80k-120k), Senior (120k-160k),
+          Staff / Principal (>160k), or No salary info.
+
+      - name: seniority
+        description: Seniority level inferred from job title keywords.
+
+      - name: req_python
+        description: True if Python is mentioned in the description.
+
+      - name: req_sql
+        description: True if SQL is mentioned in the description.
+
+      - name: req_dbt
+        description: True if dbt is mentioned in the description.
+
+      - name: req_spark
+        description: True if Apache Spark is mentioned in the description.
+
+      - name: req_airflow
+        description: True if Apache Airflow is mentioned in the description.
+
+      - name: req_kafka
+        description: True if Kafka is mentioned in the description.
+
+      - name: req_kubernetes
+        description: True if Kubernetes or k8s is mentioned in the description.
+
+      - name: req_aws
+        description: True if AWS is mentioned in the description.
+
+      - name: req_gcp
+        description: True if GCP or BigQuery is mentioned in the description.
+
+      - name: req_azure
+        description: True if Azure is mentioned in the description.

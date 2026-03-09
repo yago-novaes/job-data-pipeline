@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dbt-profiles
+  namespace: job-pipeline
+data:
+  profiles.yml: |
+    job_analysis:
+      outputs:
+        dev:
+          type: duckdb
+          path: /data/job_market.db
+          extensions:
+            - httpfs
+            - icu
+      target: dev

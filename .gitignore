@@ -9,6 +9,12 @@ __pycache__/
 # Data
 data/raw/*
 data/processed/*.duckdb
+data/processed/*.db
+
+# Logs
+logs/
+src/transform/logs/
+src/transform/job_analysis/logs/
 
 # IDEs
 .vscode/

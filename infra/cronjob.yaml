@@ -1,0 +1,60 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: job-pipeline
+  namespace: job-pipeline
+spec:
+  # Runs every day at 06:00 UTC
+  schedule: "0 6 * * *"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 2
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          volumes:
+            - name: data
+              persistentVolumeClaim:
+                claimName: job-pipeline-data
+            - name: dbt-profiles
+              configMap:
+                name: dbt-profiles
+
+          containers:
+            - name: pipeline
+              image: your-registry/job-data-pipeline:latest  # replace with your image
+              imagePullPolicy: Always
+              command: ["bash", "-c"]
+              args:
+                - |
+                  set -e
+                  echo "==> Starting extraction..."
+                  python src/extraction/extract_jobs.py
+                  echo "==> Running dbt transformations..."
+                  dbt run --project-dir src/transform/job_analysis --profiles-dir /app/profiles
+                  dbt test --project-dir src/transform/job_analysis --profiles-dir /app/profiles
+                  echo "==> Pipeline complete."
+
+              env:
+                - name: RAPIDAPI_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: job-pipeline-secrets
+                      key: rapidapi-key
+
+              volumeMounts:
+                - name: data
+                  mountPath: /data
+                - name: dbt-profiles
+                  mountPath: /app/profiles
+                  readOnly: true
+
+              resources:
+                requests:
+                  memory: "256Mi"
+                  cpu: "250m"
+                limits:
+                  memory: "512Mi"
+                  cpu: "500m"

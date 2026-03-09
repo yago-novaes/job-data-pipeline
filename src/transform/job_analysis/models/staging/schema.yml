@@ -1,0 +1,42 @@
+version: 2
+
+models:
+  - name: stg_jobs
+    description: >
+      Staging model that reads raw JSON files from the JSearch API and
+      flattens the nested structure into a clean tabular format.
+    columns:
+      - name: job_id
+        description: Unique identifier for the job posting.
+        tests:
+          - not_null
+          - unique
+
+      - name: job_title
+        description: Title of the job position.
+        tests:
+          - not_null
+
+      - name: company_name
+        description: Name of the hiring company.
+
+      - name: is_remote
+        description: Whether the job allows remote work.
+
+      - name: country
+        description: Country where the job is located (ISO 2-letter code).
+
+      - name: posted_at
+        description: Timestamp when the job was posted.
+
+      - name: min_salary
+        description: Minimum salary for the role (in the original salary_period unit).
+
+      - name: max_salary
+        description: Maximum salary for the role (in the original salary_period unit).
+
+      - name: salary_period
+        description: Period for salary values (HOUR, WEEK, MONTH, YEAR).
+
+      - name: description
+        description: Full text of the job description.
